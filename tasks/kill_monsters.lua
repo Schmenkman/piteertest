@@ -17,7 +17,6 @@ local task = {
         return close_enemy ~= nil
     end,
     Execute = function()
-        explorer.is_task_running = true  -- Setze dies am Anfang der Execute-Funktion
         explorer.current_task = "Kill Monsters"
         local player_pos = get_player_position()
 
@@ -35,7 +34,7 @@ local task = {
             stuck_position = nil
         end
 
-        local distance_check = 4
+        local distance_check = settings.melee_logic and 2 or 6.5
         local enemy = utils.get_closest_enemy()
         if not enemy then return false end
 
@@ -43,17 +42,22 @@ local task = {
 
         if not within_distance then
             local enemy_pos = enemy:get_position()
-    
+
             explorer:clear_path_and_target()
             explorer:set_custom_target(enemy_pos)
             explorer:move_to_target()
         else
-            -- Der Spieler ist bereits innerhalb von 4 Metern, keine weitere Bewegung notwendig
-        end
+            if settings.melee_logic then
+                local enemy_pos = enemy:get_position()
 
-        
+                explorer:clear_path_and_target()
+                explorer:set_custom_target(enemy_pos:get_extended(player_pos, -1.0))
+                explorer:move_to_target()
+            else
+                -- do nothing for now due to being ranged
+            end
+        end
         explorer.current_task = nil
-        explorer.is_task_running = false  -- Setze dies am Ende der Execute-Funktion
     end
 }
 

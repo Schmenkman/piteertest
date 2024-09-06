@@ -12,25 +12,7 @@ local function set_height_of_valid_position(point)
     return utility.set_height_of_valid_position(point)
 end
 
-local function move_to_random_point_3_units_away()
-    local player_pos = get_player_position()
-    local angle = math.random() * 2 * math.pi
-    local random_point = vec3:new(
-        player_pos:x() + 3 * math.cos(angle),
-        player_pos:y() + 3 * math.sin(angle),
-        player_pos:z()
-    )
-    random_point = set_height_of_valid_position(random_point) -- Correctly reference the function
 
-    if utility.is_point_walkeable(random_point) then
-        explorer:set_custom_target(random_point)
-        explorer:move_to_target()
-        return true
-    else
-        console.print("Random point is not walkable.")
-        return false
-    end
-end
 
 local task = {
     name = "Open Pit",
@@ -126,10 +108,7 @@ local task = {
             explorer:move_to_target()
         end
 
-        -- Move to a random point 3 units away from the player position
-        if not move_to_random_point_3_units_away() then
-            console.print("Failed to move to a random point 3 units away.")
-        end
+        
     end
 }
 

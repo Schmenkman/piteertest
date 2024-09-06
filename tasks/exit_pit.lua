@@ -39,6 +39,7 @@ local task = {
         end
 
         explorer.is_task_running = false  -- Reset the flag
+        explorer.reset_unexplored_areas()
         console.print("Setting explorer task running flag to false.")
     end
 }
